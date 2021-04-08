@@ -4,9 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:virtual_store_app/helpers/firebase_errors.dart';
 import 'package:virtual_store_app/models/user.dart';
 
-class UserManager  extends ChangeNotifier{
-
-  UserManager(){
+class UserManager extends ChangeNotifier {
+  UserManager() {
     _loadCurrentUser();
   }
 
@@ -14,6 +13,7 @@ class UserManager  extends ChangeNotifier{
   FirebaseUser user;
 
   bool _loading = false;
+
   bool get loading => _loading;
 
   Future<void> signIn({User user, Function onFail, Function onSuccess}) async {
@@ -27,7 +27,6 @@ class UserManager  extends ChangeNotifier{
       print(result.user.uid);
 
       onSuccess();
-
     } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
     }
@@ -35,18 +34,32 @@ class UserManager  extends ChangeNotifier{
     loading = false;
   }
 
-  set loading(bool value){
+  Future<void> signUp({User user, Function onFail, Function onSuccess}) async {
+    loading = true;
+    try {
+      final AuthResult result = await auth.createUserWithEmailAndPassword(
+          email: user.email, password: user.password);
+
+        this.user = result.user;
+
+        onSuccess();
+
+    } on PlatformException catch (e){
+      onFail(getErrorString(e.code));
+    }
+  }
+
+  set loading(bool value) {
     _loading = value;
     notifyListeners();
   }
 
-  Future<void> _loadCurrentUser() async{
+  Future<void> _loadCurrentUser() async {
     final FirebaseUser currentUser = await auth.currentUser();
-    if(currentUser != null){
+    if (currentUser != null) {
       user = currentUser;
       print(user.uid);
     }
     notifyListeners();
   }
-
 }
