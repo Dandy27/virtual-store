@@ -17,6 +17,17 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       // key: scaffoldKey,
       appBar: AppBar(
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/signup');
+          }, child: const Text(
+              'CRIAR CONTA',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white
+            ),
+          ))
+        ],
         title: Text('Entrar'),
         centerTitle: true,
       ),
@@ -96,12 +107,14 @@ class LoginScreen extends StatelessWidget {
                                     });
                               }
                             },
-                      child: userManager.loading ? CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.white),
-                      ) : const Text(
-                        'Entrar',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                      child: userManager.loading
+                          ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(Colors.white),
+                            )
+                          : const Text(
+                              'Entrar',
+                              style: TextStyle(fontSize: 20),
+                            ),
                     ),
                   )
                 ],
