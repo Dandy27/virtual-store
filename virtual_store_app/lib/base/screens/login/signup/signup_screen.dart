@@ -115,7 +115,7 @@ class SignUpScreen extends StatelessWidget {
                       }
                     },
                     child: const Text(
-                      'Entrar',
+                      'Criar conta',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
