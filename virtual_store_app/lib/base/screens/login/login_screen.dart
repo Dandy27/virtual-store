@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:virtual_store_app/helpers/validators.dart';
+import 'package:provider/provider.dart';
+import 'package:virtual_store_app/models/user.dart';
+import 'package:virtual_store_app/models/user_manager.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -64,7 +67,10 @@ class LoginScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState.validate()) {
-                        print(emailController.text);
+                        context.read<UserManager>().signIn(
+                          User(email: emailController.text,
+                          password: passController.text)
+                        );
                       }
                     },
                     child: const Text(
