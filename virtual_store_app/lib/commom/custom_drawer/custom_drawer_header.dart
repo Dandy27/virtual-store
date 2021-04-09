@@ -7,7 +7,7 @@ class CustomDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 20, 16, 8),
+      padding: const EdgeInsets.fromLTRB(28, 20, 16, 8),
       height: 200,
       child: Consumer<UserManager>(builder: (_, userManager, __){
         return Column(

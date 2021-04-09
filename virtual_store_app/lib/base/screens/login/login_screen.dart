@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           TextButton(onPressed: () {
-            Navigator.of(context).pushNamed('/signup');
+            Navigator.of(context).pushReplacementNamed('/signup');
           }, child: const Text(
               'CRIAR CONTA',
             style: TextStyle(

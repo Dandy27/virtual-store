@@ -29,7 +29,7 @@ class SignUpScreen extends StatelessWidget {
                   shrinkWrap: true,
                   children: [
                     TextFormField(
-                      enabled: !userManager.isLoggedIn,
+                      enabled: !userManager.loading,
                       onSaved: (name) => user.name = name,
                       validator: (name) {
                         if (name.isEmpty)
@@ -45,7 +45,7 @@ class SignUpScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
-                        enabled: !userManager.isLoggedIn,
+                        enabled: !userManager.loading,
                         onSaved: (email) => user.email = email,
                         validator: (email) {
                           if (email.isEmpty)
@@ -59,7 +59,7 @@ class SignUpScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
-                      enabled: !userManager.isLoggedIn,
+                      enabled: !userManager.loading,
                       onSaved: (pass) => user.password = pass,
                       validator: (pass) {
                         if (pass.isEmpty)
@@ -74,7 +74,7 @@ class SignUpScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
-                      enabled: !userManager.isLoggedIn,
+                      enabled: !userManager.loading,
                       onSaved: (pass) => user.confirmPassword = pass,
                       validator: (pass) {
                         if (pass.isEmpty)
@@ -111,7 +111,6 @@ class SignUpScreen extends StatelessWidget {
                                   userManager.signUp(
                                       user: user,
                                       onSuccess: () {
-                                        debugPrint('sucesso');
                                         Navigator.of(context).pop();
                                       },
                                       onFail: (e) {
