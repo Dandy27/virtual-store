@@ -23,13 +23,13 @@ class SignUpScreen extends StatelessWidget {
           child: Form(
             key: formKey,
             child: Consumer<UserManager>(
-              builder: (_, userMAnager, __) {
+              builder: (_, userManager, __) {
                 return ListView(
                   padding: EdgeInsets.all(16),
                   shrinkWrap: true,
                   children: [
                     TextFormField(
-                      enabled: !userMAnager.isLoggedIn,
+                      enabled: !userManager.isLoggedIn,
                       onSaved: (name) => user.name = name,
                       validator: (name) {
                         if (name.isEmpty)
@@ -45,7 +45,7 @@ class SignUpScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
-                        enabled: !userMAnager.isLoggedIn,
+                        enabled: !userManager.isLoggedIn,
                         onSaved: (email) => user.email = email,
                         validator: (email) {
                           if (email.isEmpty)
@@ -59,7 +59,7 @@ class SignUpScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
-                      enabled: !userMAnager.isLoggedIn,
+                      enabled: !userManager.isLoggedIn,
                       onSaved: (pass) => user.password = pass,
                       validator: (pass) {
                         if (pass.isEmpty)
@@ -74,7 +74,7 @@ class SignUpScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
-                      enabled: !userMAnager.isLoggedIn,
+                      enabled: !userManager.isLoggedIn,
                       onSaved: (pass) => user.confirmPassword = pass,
                       validator: (pass) {
                         if (pass.isEmpty)
@@ -94,7 +94,7 @@ class SignUpScreen extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Theme.of(context).primaryColor),
-                        onPressed: userMAnager.loading
+                        onPressed: userManager.loading
                             ? null
                             : () {
                                 if (formKey.currentState.validate()) {
@@ -108,7 +108,7 @@ class SignUpScreen extends StatelessWidget {
                                     ));
                                     return;
                                   }
-                                  userMAnager.signUp(
+                                  userManager.signUp(
                                       user: user,
                                       onSuccess: () {
                                         debugPrint('sucesso');
@@ -124,7 +124,7 @@ class SignUpScreen extends StatelessWidget {
                                       });
                                 }
                               },
-                        child: userMAnager.loading
+                        child: userManager.loading
                             ? CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation(Colors.white),
