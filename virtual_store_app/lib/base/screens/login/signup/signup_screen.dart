@@ -22,105 +22,122 @@ class SignUpScreen extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
             key: formKey,
-            child: ListView(
-              padding: EdgeInsets.all(16),
-              shrinkWrap: true,
-              children: [
-                TextFormField(
-                  onSaved: (name) => user.name = name,
-                  validator: (name) {
-                    if (name.isEmpty)
-                      return 'Campo obrigatŕio';
-                    else if (name.trim().split('').length <= 1)
-                      return 'Preencha seu Nome completo';
-                    return null;
-                  },
-                  decoration: const InputDecoration(hintText: 'Nome Completo'),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                    onSaved: (email) => user.email = email,
-                    validator: (email) {
-                      if (email.isEmpty)
-                        return 'Campo obrigatório';
-                      else if (!emailValid(email)) return 'E-mail inválido';
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: 'E-mail')),
-                const SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  onSaved: (pass) => user.password = pass,
-                  validator: (pass) {
-                    if (pass.isEmpty)
-                      return 'Campo obrigatório';
-                    else if (pass.length < 6) return 'Senha muito curta';
-                    return null;
-                  },
-                  decoration: const InputDecoration(hintText: 'Senha'),
-                  obscureText: true,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  onSaved: (pass) => user.confirmPassword = pass,
-                  validator: (pass) {
-                    if (pass.isEmpty)
-                      return 'Campo obrigatório';
-                    else if (pass.length < 6) return 'Senha muito curta';
-                    return null;
-                  },
-                  decoration: const InputDecoration(hintText: 'Repitir Senha'),
-                  obscureText: true,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  height: 44,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor),
-                    onPressed: () {
-                      if (formKey.currentState.validate()) {
-                        formKey.currentState.save();
-
-                        if (user.password != user.confirmPassword) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Senhas não coincidem!'),
-                            backgroundColor: Colors.red,
-                          ));
-                          return;
-                        }
-                        context.read<UserManager>().signUp(
-                          user: user,
-                          onSuccess: (){
-                            debugPrint('sucesso');
-                            Navigator.of(context).pop();
-                          },
-                          onFail: (e){
-                            ScaffoldMessenger.of(context).showSnackBar((
-                            SnackBar(
-                              content: Text('Falha ao cadastrar: $e'),
-                              backgroundColor: Colors.red,
-                            )
-                            ));
-                          }
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Criar conta',
-                      style: TextStyle(fontSize: 20),
+            child: Consumer<UserManager>(
+              builder: (_, userMAnager, __) {
+                return ListView(
+                  padding: EdgeInsets.all(16),
+                  shrinkWrap: true,
+                  children: [
+                    TextFormField(
+                      enabled: !userMAnager.isLoggedIn,
+                      onSaved: (name) => user.name = name,
+                      validator: (name) {
+                        if (name.isEmpty)
+                          return 'Campo obrigatŕio';
+                        else if (name.trim().split('').length <= 1)
+                          return 'Preencha seu Nome completo';
+                        return null;
+                      },
+                      decoration:
+                          const InputDecoration(hintText: 'Nome Completo'),
                     ),
-                  ),
-                ),
-              ],
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                        enabled: !userMAnager.isLoggedIn,
+                        onSaved: (email) => user.email = email,
+                        validator: (email) {
+                          if (email.isEmpty)
+                            return 'Campo obrigatório';
+                          else if (!emailValid(email)) return 'E-mail inválido';
+                          return null;
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(hintText: 'E-mail')),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                      enabled: !userMAnager.isLoggedIn,
+                      onSaved: (pass) => user.password = pass,
+                      validator: (pass) {
+                        if (pass.isEmpty)
+                          return 'Campo obrigatório';
+                        else if (pass.length < 6) return 'Senha muito curta';
+                        return null;
+                      },
+                      decoration: const InputDecoration(hintText: 'Senha'),
+                      obscureText: true,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                      enabled: !userMAnager.isLoggedIn,
+                      onSaved: (pass) => user.confirmPassword = pass,
+                      validator: (pass) {
+                        if (pass.isEmpty)
+                          return 'Campo obrigatório';
+                        else if (pass.length < 6) return 'Senha muito curta';
+                        return null;
+                      },
+                      decoration:
+                          const InputDecoration(hintText: 'Repitir Senha'),
+                      obscureText: true,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                      height: 44,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor),
+                        onPressed: userMAnager.loading
+                            ? null
+                            : () {
+                                if (formKey.currentState.validate()) {
+                                  formKey.currentState.save();
+
+                                  if (user.password != user.confirmPassword) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text('Senhas não coincidem!'),
+                                      backgroundColor: Colors.red,
+                                    ));
+                                    return;
+                                  }
+                                  userMAnager.signUp(
+                                      user: user,
+                                      onSuccess: () {
+                                        debugPrint('sucesso');
+                                        Navigator.of(context).pop();
+                                      },
+                                      onFail: (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar((SnackBar(
+                                          content:
+                                              Text('Falha ao cadastrar: $e'),
+                                          backgroundColor: Colors.red,
+                                        )));
+                                      });
+                                }
+                              },
+                        child: userMAnager.loading
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation(Colors.white),
+                              )
+                            : const Text(
+                                'Criar conta',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
