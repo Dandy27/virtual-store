@@ -2,6 +2,8 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:virtual_store_app/models/product.dart';
 
+import 'components/size_widget.dart';
+
 class ProductScreen extends StatelessWidget {
   ProductScreen(this.product);
 
@@ -9,7 +11,6 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
@@ -52,21 +53,39 @@ class ProductScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text('R\$ 5100,00',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: primaryColor
-                ),),
-                Padding(padding: const EdgeInsets.only(top: 16, bottom: 8),
+                Text(
+                  'R\$ 5100,00',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 8),
                   child: Text(
-                    'Descrição',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500
-                    ),
-                  ),)
-
+                    'Descrição:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Text(
+                  product.description,
+                  style: TextStyle(fontSize: 16),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 8),
+                  child: Text(
+                    'Tamanhos',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Wrap(
+                  spacing: 8,
+                    runSpacing: 8,
+                    children: product.sizes.map((s) {
+                  return SizeWidget(
+                    size: s,
+                  );
+                }).toList())
               ],
             ),
           ),
