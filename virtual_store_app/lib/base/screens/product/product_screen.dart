@@ -2,6 +2,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_store_app/models/product.dart';
+import 'package:virtual_store_app/models/user_manager.dart';
 
 import 'components/size_widget.dart';
 
@@ -40,7 +41,7 @@ class ProductScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     product.name,
@@ -67,7 +68,8 @@ class ProductScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: Text(
                       'Descrição:',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ),
                   Text(
@@ -78,17 +80,46 @@ class ProductScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: Text(
                       'Tamanhos',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ),
                   Wrap(
-                    spacing: 8,
+                      spacing: 8,
                       runSpacing: 8,
                       children: product.sizes.map((s) {
-                    return SizeWidget(
-                      size: s,
-                    );
-                  }).toList())
+                        return SizeWidget(
+                          size: s,
+                        );
+                      }).toList()),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  if (product.hasStock)
+                    Consumer2<UserManager, Product>(
+                      builder: (_, userManager, product, __) {
+                        return SizedBox(
+                          height: 44,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: primaryColor,
+                                textStyle: const TextStyle(fontSize: 18)),
+                            onPressed: product.selectedSize != null
+                                ? () {
+                                    if (userManager.isLoggedIn) {
+                                      // TODO: ADICIONAR AO CARRINHO
+                                    } else {
+                                      Navigator.of(context).pushNamed('/login');
+                                    }
+                                  }
+                                : null,
+                            child: Text(userManager.isLoggedIn
+                                ? 'Adicionar ao Carrinho'
+                                : 'Entre para Comprar'),
+                          ),
+                        );
+                      },
+                    )
                 ],
               ),
             ),
