@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_store_app/base/screens/login/signup/signup_screen.dart';
+import 'package:virtual_store_app/models/cart_manager.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/product_manager.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
         lazy: false,),
         ChangeNotifierProvider(create: (_) => ProductManager(),
         lazy: false,),
+        Provider(create: (_) => CartManager(),
+        lazy: false,)
       ],
       child: MaterialApp(
         title: 'Virtual Loja',
