@@ -17,7 +17,7 @@ class CustomDrawerHeader extends StatelessWidget {
             Container(
               padding: EdgeInsets.zero,
               width: 250,
-              child: Image.asset('images/suzzara.png'),
+              child: Image.asset('images/suzzara_black.png'),
             ),
             Text(
               'Olá, ${userManager.user?.name ?? ''}',

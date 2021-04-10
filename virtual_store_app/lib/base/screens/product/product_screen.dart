@@ -52,7 +52,7 @@ class ProductScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text('R\$ 243,00',
+                Text('R\$ 5100,00',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
