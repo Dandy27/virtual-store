@@ -21,7 +21,7 @@ class CartManager {
   Future<void>_loadCartItems()async{
     final QuerySnapshot cartSnap = await user.cartReference.getDocuments();
 
-    items = cartSnap.documents.map((d) => CartProduct.fromDocuments(d)).toList();
+    items = cartSnap.documents.map((d) => CartProduct.fromDocuments(d)..addListener(_onItemUpdate)).toList();
   }
 
 
@@ -31,15 +31,13 @@ class CartManager {
        e.quantity++;
      } catch(e){
        final cartProduct = CartProduct.fromProduct(product);
+       cartProduct.addListener(_onItemUpdate);
        items..add(cartProduct);
        user.cartReference.add(cartProduct.toCartItemMap());
      }
+  }
 
-
-
-
-
-
-
+  void _onItemUpdate(){
+    print('atualizado ');
   }
 }
