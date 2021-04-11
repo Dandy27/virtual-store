@@ -41,13 +41,24 @@ class CartTile extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.w300),
                       ),
                     ),
-                    Text(
-                      'R\$ ${cartProduct.unitPrice.toStringAsFixed(2)}',
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    )
+                    Consumer<CartProduct>(
+                        builder: (_, cartProduct, __) {
+                          if(cartProduct.hasStock)
+                      return Text(
+                        'R\$ ${cartProduct.unitPrice.toStringAsFixed(2)}',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      );
+                      else
+                        return Text(''
+                      'Sem estoque disponivel',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.red
+                        ),);
+                    })
                   ],
                 ),
               )),
@@ -65,7 +76,9 @@ class CartTile extends StatelessWidget {
                     ),
                     CustomIconButton(
                       iconData: Icons.remove,
-                      color: cartProduct.quantity > 1 ? Theme.of(context).primaryColor : Colors.red,
+                      color: cartProduct.quantity > 1
+                          ? Theme.of(context).primaryColor
+                          : Colors.red,
                       onTap: cartProduct.decrement,
                     )
                   ],
