@@ -22,16 +22,17 @@ class Product extends ChangeNotifier {
   List<ItemSize> sizes;
 
   ItemSize _selectedSize;
+
   ItemSize get selectedSize => _selectedSize;
 
-  set selectedSize(ItemSize value){
+  set selectedSize(ItemSize value) {
     _selectedSize = value;
     notifyListeners();
   }
 
   int get totalStock {
     int stock = 0;
-    for(final size in sizes){
+    for (final size in sizes) {
       stock += size.stock;
     }
     return stock;
@@ -41,4 +42,11 @@ class Product extends ChangeNotifier {
     return totalStock > 0;
   }
 
+  ItemSize findSize(String name) {
+    try {
+      return sizes.firstWhere((s) => s.name == name);
+    } catch (e) {
+      return null;
+    }
+  }
 }

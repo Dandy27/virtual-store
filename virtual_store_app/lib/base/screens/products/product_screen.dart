@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_store_app/commom/custom_drawer/custom_drawer.dart';
 import 'package:virtual_store_app/models/product_manager.dart';
-
 import 'components/product_list_tile.dart';
 import 'components/search_dialog.dart';
 

@@ -5,8 +5,8 @@ import 'package:virtual_store_app/models/cart_manager.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/product_manager.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
-
 import 'base/screens/base_screen.dart';
+import 'base/screens/cart/cart_screen.dart';
 import 'base/screens/login/login_screen.dart';
 import 'base/screens/product/product_screen.dart';
 
@@ -20,12 +20,17 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (_) => UserManager(),
-        lazy: false,),
-        ChangeNotifierProvider(create: (_) => ProductManager(),
-        lazy: false,),
-        Provider(create: (_) => CartManager(),
-        lazy: false,)
+          create: (_) => UserManager(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductManager(),
+          lazy: false,
+        ),
+        Provider(
+          create: (_) => CartManager(),
+          lazy: false,
+        )
       ],
       child: MaterialApp(
         title: 'Virtual Loja',
@@ -44,9 +49,10 @@ class MyApp extends StatelessWidget {
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
             case '/product':
-              return MaterialPageRoute(builder: (_) => ProductScreen(
-                settings.arguments as Product
-              ));
+              return MaterialPageRoute(
+                  builder: (_) => ProductScreen(settings.arguments as Product));
+            case '/cart':
+              return MaterialPageRoute(builder: (_) => CartScreen());
             case '/base':
             default:
               return MaterialPageRoute(builder: (_) => BaseScreen());
