@@ -9,11 +9,14 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(section.name,
-    style: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w800,
-      color: Colors.white
-    ),);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Text(section.name,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+        color: Colors.white
+      ),),
+    );
   }
 }
