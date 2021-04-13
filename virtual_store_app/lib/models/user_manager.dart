@@ -40,7 +40,7 @@ class UserManager extends ChangeNotifier {
     loading = false;
   }
 
-  void signOut(){
+  void signOut() {
     auth.signOut();
     user = null;
     notifyListeners();
@@ -75,10 +75,18 @@ class UserManager extends ChangeNotifier {
           await firestore.collection('users').document(currentUser.uid).get();
       user = User.fromDocument(docUser);
 
-      print(user.name);
+      final docAdmin =
+          await firestore.collection('admins').document(user.id).get();
+      if (docAdmin.exists) {
+        user.admin = true;
+      }
+
+      print(user.admin);
 
       notifyListeners();
     }
-    notifyListeners();
+
   }
+  bool get adminEnabled => user != null && user.admin;
+
 }
