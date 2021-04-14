@@ -1,4 +1,5 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_store_app/models/cart_manager.dart';
@@ -23,6 +24,17 @@ class ProductScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(product.name),
           centerTitle: true,
+          actions: [
+            Consumer<UserManager>(builder: (_, userManager, __) {
+              if (userManager.adminEnabled) {
+                return IconButton(icon: Icon(Icons.edit), onPressed: () {
+                  Navigator.of(context).pushReplacementNamed('/edit_product', arguments: product);
+                });
+              } else {
+                return Container();
+              }
+            })
+          ],
         ),
         body: ListView(
           children: [
@@ -108,8 +120,10 @@ class ProductScreen extends StatelessWidget {
                             onPressed: product.selectedSize != null
                                 ? () {
                                     if (userManager.isLoggedIn) {
-                                     context.read<CartManager>().addToCart(product);
-                                     Navigator.of(context).pushNamed('/cart');
+                                      context
+                                          .read<CartManager>()
+                                          .addToCart(product);
+                                      Navigator.of(context).pushNamed('/cart');
                                     } else {
                                       Navigator.of(context).pushNamed('/login');
                                     }
