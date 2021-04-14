@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_store_app/base/screens/login/signup/signup_screen.dart';
+import 'package:virtual_store_app/models/admin_users_manager.dart';
 import 'package:virtual_store_app/models/cart_manager.dart';
 import 'package:virtual_store_app/models/home_manager.dart';
 import 'package:virtual_store_app/models/product.dart';
@@ -10,6 +11,7 @@ import 'base/screens/base_screen.dart';
 import 'base/screens/cart/cart_screen.dart';
 import 'base/screens/login/login_screen.dart';
 import 'base/screens/product/product_screen.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -28,14 +30,21 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductManager(),
           lazy: false,
         ),
-        ChangeNotifierProvider(create: (_) => HomeManager(),
-        lazy: false,),
+        ChangeNotifierProvider(
+          create: (_) => HomeManager(),
+          lazy: false,
+        ),
         ChangeNotifierProxyProvider<UserManager, CartManager>(
           create: (_) => CartManager(),
           lazy: false,
           update: (_, userManager, cartManager) =>
-          cartManager..updateUser(userManager),
-        )
+              cartManager..updateUser(userManager),
+        ),
+        ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
+          create: (_) => AdminUsersManager(),
+          lazy: false,
+          update: (_, userManager, adminUsersManager) =>
+          adminUsersManager..updateUser(userManager))
       ],
       child: MaterialApp(
         title: 'Virtual Loja',
