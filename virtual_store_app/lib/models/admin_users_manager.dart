@@ -1,33 +1,30 @@
-import 'package:faker/faker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:virtual_store_app/models/user.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
 
 class AdminUsersManager extends ChangeNotifier {
-
   List<User> users = [];
 
-  void updateUser(UserManager userManager){
-  if(userManager.adminEnabled){
-    _listenToUsers();
-  }
-  }
+  final Firestore firestore = Firestore.instance;
 
-  void _listenToUsers(){
-
-    const  faker = Faker();
-
-    for(int i = 0; i < 100; i++){
-      users.add(      User(
-          name: faker.person.name(),
-          email: faker.internet.email()
-      ));
+  void updateUser(UserManager userManager) {
+    if (userManager.adminEnabled) {
+      _listenToUsers();
     }
+  }
 
-users.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+  void _listenToUsers() {
+    firestore.collection('users').getDocuments().then((snapshot) {
+      users = snapshot.documents.map((e) => User.fromDocument(e)).toList();
+      users
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      notifyListeners();
+    });
+
+    users.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     notifyListeners();
   }
 
   List<String> get names => users.map((e) => e.name).toList();
-
 }
