@@ -14,6 +14,7 @@ class SizesForm extends StatelessWidget {
     return FormField<List<ItemSize>>(
       initialValue: List.from(product.sizes),
       builder: (state) {
+        print(state.value);
         return Column(
           children: [
             Row(
@@ -37,11 +38,24 @@ class SizesForm extends StatelessWidget {
             Column(
               children: state.value.map((size) {
                 return EditItemSize(
+                  key: ObjectKey(size),
                   size: size,
-                  onRemove: (){
+                  onRemove: () {
                     state.value.remove(size);
                     state.didChange(state.value);
                   },
+                  onMoveUp: size != state.value.first ? () {
+                    final index = state.value.indexOf(size);
+                    state.value.remove(size);
+                    state.value.insert(index - 1, size);
+                    state.didChange(state.value);
+                  } : null,
+                  onMoveDown: size != state.value.last ? () {
+                    final index = state.value.indexOf(size);
+                    state.value.remove(size);
+                    state.value.insert(index + 1, size);
+                    state.didChange(state.value);
+                  } : null,
                 );
               }).toList(),
             ),
