@@ -3,6 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:virtual_store_app/models/item_size.dart';
 
 class Product extends ChangeNotifier {
+  Product({this.id, this.name, this.description, this.images, this.sizes}) {
+    images = images ?? [];
+    sizes = sizes ?? [];
+  }
+
   Product.fromDocument(DocumentSnapshot document) {
     id = document.documentID;
     name = document['name'] as String;
@@ -42,12 +47,11 @@ class Product extends ChangeNotifier {
     return totalStock > 0;
   }
 
-  num get basePrice{
+  num get basePrice {
     num lowest = double.infinity;
-    for(final size in sizes){
-      if( size.price < lowest && size.hasStock)
-        lowest = size.price;
-         }
+    for (final size in sizes) {
+      if (size.price < lowest && size.hasStock) lowest = size.price;
+    }
     return lowest;
   }
 
@@ -59,4 +63,13 @@ class Product extends ChangeNotifier {
     }
   }
 
+  Product clone() {
+    return Product(
+      id: id,
+      name: name,
+      description: description,
+      images: List.from(images),
+      sizes: sizes.map((size) => size.clone()).toList(),
+    );
+  }
 }
