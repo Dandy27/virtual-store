@@ -1,13 +1,19 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:virtual_store_app/commom/custom_drawer/custom_icon_button.dart';
 import 'package:virtual_store_app/models/item_size.dart';
 
 class EditItemSize extends StatelessWidget {
-  const EditItemSize({this.size, this.onRemove});
-  final ItemSize size;
+  const EditItemSize(
+      {Key key, this.size, this.onRemove, this.onMoveUp, this.onMoveDown})
+      : super(key: key);
 
+  final ItemSize size;
   final VoidCallback onRemove;
+  final VoidCallback onMoveUp;
+  final VoidCallback onMoveDown;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +24,11 @@ class EditItemSize extends StatelessWidget {
           child: TextFormField(
             initialValue: size.name,
             decoration: InputDecoration(labelText: 'Título', isDense: true),
+            validator: (name) {
+              if (name.isEmpty) return 'Inválido';
+              return null;
+            },
+            onChanged: (name) => size.name = name,
           ),
         ),
         const SizedBox(
@@ -29,6 +40,11 @@ class EditItemSize extends StatelessWidget {
             initialValue: size.stock?.toString(),
             decoration:
                 const InputDecoration(labelText: 'Estoque', isDense: true),
+            validator: (stock) {
+              if (int.tryParse(stock) == null) return 'Inválido';
+              return null;
+            },
+            onChanged: (stock) => size.stock = int.tryParse((stock)),
             keyboardType: TextInputType.number,
           ),
         ),
@@ -42,6 +58,11 @@ class EditItemSize extends StatelessWidget {
             decoration: const InputDecoration(
                 labelText: 'Preço', isDense: true, prefixText: 'R\$'),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            validator: (price) {
+              if (num.tryParse(price) == null) return 'Inválido';
+              return null;
+            },
+            onChanged: (price) => size.price = num.tryParse(price) ,
           ),
         ),
         CustomIconButton(
@@ -52,10 +73,12 @@ class EditItemSize extends StatelessWidget {
         CustomIconButton(
           iconData: Icons.arrow_drop_up,
           color: Colors.black,
+          onTap: onMoveUp,
         ),
         CustomIconButton(
           iconData: Icons.arrow_drop_down,
           color: Colors.black,
+          onTap: onMoveDown,
         )
       ],
     );
