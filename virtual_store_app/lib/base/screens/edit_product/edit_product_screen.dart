@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:virtual_store_app/models/product.dart';
 
 import 'components/images_form.dart';
+import 'components/sizes_form.dart';
 
 class EditProductScreen extends StatelessWidget {
   EditProductScreen(this.product);
@@ -55,11 +56,12 @@ class EditProductScreen extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: primaryColor
-                    ),
+                        color: primaryColor),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16,),
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                    ),
                     child: Text(
                       'Descrição',
                       style:
@@ -72,16 +74,14 @@ class EditProductScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                     decoration: const InputDecoration(
-                      hintText: 'Descrição',
-                      border: InputBorder.none
-                    ),
+                        hintText: 'Descrição', border: InputBorder.none),
                     maxLines: null,
-                      validator: (desc){
-                      if(desc.length < 10)
-                        return 'Descrição muuito curta';
+                    validator: (desc) {
+                      if (desc.length < 10) return 'Descrição muuito curta';
                       return null;
-                      },
+                    },
                   ),
+                  SizesForm(product),
                   ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState.validate()) {
