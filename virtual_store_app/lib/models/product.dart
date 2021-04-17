@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 import 'package:virtual_store_app/models/item_size.dart';
 
 class Product extends ChangeNotifier {
@@ -7,6 +11,13 @@ class Product extends ChangeNotifier {
     images = images ?? [];
     sizes = sizes ?? [];
   }
+
+  final Firestore firestore = Firestore.instance;
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
+  DocumentReference get firestoreRef => firestore.document('products/$id');
+
+  StorageReference get storageRef => storage.ref().child('products').child(id);
 
   Product.fromDocument(DocumentSnapshot document) {
     id = document.documentID;
@@ -25,6 +36,17 @@ class Product extends ChangeNotifier {
   String description;
   List<String> images;
   List<ItemSize> sizes;
+
+  @override
+  String toString() {
+    return 'Product{id: $id, name: $name, '
+        'description: $description, '
+        'images: $images, '
+        'sizes: $sizes, '
+        'newImages: $newImages}';
+  }
+
+  List<dynamic> newImages;
 
   ItemSize _selectedSize;
 
@@ -63,6 +85,38 @@ class Product extends ChangeNotifier {
     }
   }
 
+  List<Map<String, dynamic>> exportSizeList() {
+    return sizes.map((size) => size.toMap()).toList();
+  }
+
+  Future<void> save() async {
+    final Map<String, dynamic> data = {
+      'name': name,
+      'description': description,
+      'sizes': exportSizeList(),
+    };
+
+    if (id == null) {
+      final doc = await firestore.collection('products').add(data);
+      id = doc.documentID;
+    } else {
+      await firestoreRef.updateData(data);
+    }
+
+    final List<String> updateImages = [];
+
+    for (final newImage in newImages) {
+      if (images.contains(newImage)) {
+        updateImages.add(newImage as String);
+      } else {
+        final StorageUploadTask task =
+            storageRef.child(Uuid().v1()).putFile(newImage as File);
+        final StorageTaskSnapshot snapshot = await task.onComplete;
+        final String url = await snapshot.ref.getDownloadURL() as String;
+        updateImages.add(url);
+      }
+    }
+  }
   Product clone() {
     return Product(
       id: id,
