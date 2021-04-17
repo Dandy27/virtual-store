@@ -14,11 +14,12 @@ class ImagesForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormField<List<dynamic>>(
-      initialValue: product.images,
+      initialValue: List.from(product.images),
       validator: (images) {
         if (images.isEmpty) return 'Insira ao menos uma imagem';
         return null;
       },
+      onSaved: (images) => product.newImages = images,
       builder: (state) {
         void onImageSelected(File file) {
           state.value.add(file);
@@ -70,14 +71,14 @@ class ImagesForm extends StatelessWidget {
                           showModalBottomSheet(
                               context: context,
                               builder: (_) => ImageSourceSheet(
-                                onImageSelected: onImageSelected,
-                              ));
+                                    onImageSelected: onImageSelected,
+                                  ));
                         else
                           showCupertinoModalPopup(
                               context: context,
                               builder: (_) => ImageSourceSheet(
-                                onImageSelected: onImageSelected,
-                              ));
+                                    onImageSelected: onImageSelected,
+                                  ));
                       },
                     ),
                     color: Colors.grey[100],
@@ -89,15 +90,14 @@ class ImagesForm extends StatelessWidget {
                 autoplay: false,
               ),
             ),
-            if(state.hasError)
+            if (state.hasError)
               Container(
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.only(top: 16, left: 16),
-                child: Text(state.errorText,
-                  style: const TextStyle(
-                      color: Colors.red
-                  )
-                  ,),
+                child: Text(
+                  state.errorText,
+                  style: const TextStyle(color: Colors.red),
+                ),
               )
           ],
         );

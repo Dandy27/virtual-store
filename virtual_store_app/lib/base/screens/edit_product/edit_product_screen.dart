@@ -43,6 +43,7 @@ class EditProductScreen extends StatelessWidget {
                       if (name.length < 6) return 'Título muito curto';
                       return null;
                     },
+                    onSaved: (name) => product.name = name,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
@@ -83,6 +84,7 @@ class EditProductScreen extends StatelessWidget {
                       if (desc.length < 10) return 'Descrição muuito curta';
                       return null;
                     },
+                    onSaved: (desc) => product.description = desc,
                   ),
                   SizesForm(product),
                   const SizedBox(
@@ -96,6 +98,10 @@ class EditProductScreen extends StatelessWidget {
                             textStyle: TextStyle(fontSize: 18)),
                         onPressed: () {
                           if (formKey.currentState.validate()) {
+                            formKey.currentState.save();
+
+                            print(product);
+
                             print('válido');
                           } else {
                             print('inválido');
