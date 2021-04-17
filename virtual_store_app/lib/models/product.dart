@@ -8,6 +8,10 @@ class Product extends ChangeNotifier {
     sizes = sizes ?? [];
   }
 
+  final Firestore firestore = Firestore.instance;
+
+  DocumentReference get firestoreRef => firestore.document('products/$id');
+
   Product.fromDocument(DocumentSnapshot document) {
     id = document.documentID;
     name = document['name'] as String;
@@ -72,6 +76,26 @@ class Product extends ChangeNotifier {
     } catch (e) {
       return null;
     }
+  }
+
+  List<Map<String, dynamic>> exportSizeList(){
+    return sizes.map((size) => size.toMap()).toList();
+  }
+
+  Future<void> save() async{
+  final Map<String, dynamic> data  = {
+    'name' : name,
+    'description' : description,
+    'sizes' : exportSizeList(),
+  };
+
+  if(id == null){
+    final doc = await firestore.collection('products').add(data);
+    id = doc.documentID;
+  } else {
+    await firestoreRef.updateData(data);
+  }
+
   }
 
   Product clone() {

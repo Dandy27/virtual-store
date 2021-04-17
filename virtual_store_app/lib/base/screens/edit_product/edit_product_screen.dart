@@ -100,11 +100,11 @@ class EditProductScreen extends StatelessWidget {
                           if (formKey.currentState.validate()) {
                             formKey.currentState.save();
 
-                            print(product);
+                            product.save();
 
-                            print('válido');
+                            // print('válido');
                           } else {
-                            print('inválido');
+                            // print('inválido');
                           }
                         },
                         child: const Text('Salvar')),
