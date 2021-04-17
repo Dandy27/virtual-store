@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:virtual_store_app/models/item_size.dart';
 
@@ -116,6 +117,18 @@ class Product extends ChangeNotifier {
         updateImages.add(url);
       }
     }
+    for(final image in images){
+      if(!newImages.contains(image)){
+       try{
+         final ref = await storage.getReferenceFromUrl(image);
+         await ref.delete();
+       } catch(e){
+         debugPrint('Falha ao deletar $image');
+       }
+      }
+    }
+
+    firestoreRef.updateData({'images': updateImages});
   }
   Product clone() {
     return Product(
