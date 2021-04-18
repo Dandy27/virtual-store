@@ -4,6 +4,8 @@ import 'package:virtual_store_app/models/sectiom_item.dart';
 
 class Section {
 
+  Section({this.name, this.type, this.items});
+
   Section.fromDocument(DocumentSnapshot document){
   name = document.data['name'] as String;
   type = document.data['type'] as String;
@@ -14,6 +16,14 @@ class Section {
   String name;
   String type;
   List<SectionItem> items;
+
+
+  Section clone(){
+    return Section(
+      name:  name,
+      type: type,
+      items: items.map((e) => e.clone()).toList());
+  }
 
   @override
   String toString() {
