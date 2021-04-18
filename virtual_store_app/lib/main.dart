@@ -12,6 +12,7 @@ import 'base/screens/cart/cart_screen.dart';
 import 'base/screens/edit_product/edit_product_screen.dart';
 import 'base/screens/login/login_screen.dart';
 import 'base/screens/product/product_screen.dart';
+import 'base/screens/select_product/select_product_screen.dart';
 
 
 void main() {
@@ -74,6 +75,10 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => EditProductScreen(
                 settings.arguments as Product
               ));
+            case '/select_product':
+              return MaterialPageRoute(
+                  builder: (_) => SelectProductScreen(),
+                  settings: settings);
             case '/base':
             default:
               return MaterialPageRoute(builder: (_) => BaseScreen());
