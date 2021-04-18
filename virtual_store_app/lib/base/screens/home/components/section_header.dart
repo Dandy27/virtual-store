@@ -22,7 +22,8 @@ class SectionHeader extends StatelessWidget {
               initialValue: section.name,
               decoration: InputDecoration(
                 hintText: 'Titulo',
-                isDense: true
+                isDense: true,
+                enabledBorder: InputBorder.none
               ),
               style: TextStyle(
                 color: Colors.white,
@@ -44,7 +45,7 @@ class SectionHeader extends StatelessWidget {
     }else{
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(section.name ?? ' love',
+        child: Text(section.name ?? '',
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
