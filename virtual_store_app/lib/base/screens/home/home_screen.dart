@@ -4,6 +4,7 @@ import 'package:virtual_store_app/commom/custom_drawer/custom_drawer.dart';
 import 'package:virtual_store_app/models/home_manager.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
 
+import 'components/add_section_widget.dart';
 import 'components/section_list.dart';
 import 'components/section_staggered.dart';
 
@@ -80,6 +81,10 @@ class HomeScreen extends StatelessWidget {
                         return Container();
                     }
                   }).toList();
+
+
+                  if(homeManager.editing)
+                    children.add(AddSectionWidget(homeManager));
 
                   return SliverList(
                     delegate: SliverChildListDelegate(children),

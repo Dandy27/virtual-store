@@ -11,7 +11,7 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Text(section.name,
+      child: Text(section.name ?? ' love',
       style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w800,
