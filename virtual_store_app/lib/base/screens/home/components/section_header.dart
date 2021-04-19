@@ -5,54 +5,59 @@ import 'package:virtual_store_app/models/section.dart';
 import 'package:provider/provider.dart';
 
 class SectionHeader extends StatelessWidget {
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
-
     final homeManager = context.watch<HomeManager>();
     final section = context.watch<Section>();
 
-    if(homeManager.editing){
-      return Row(
+    if (homeManager.editing) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: TextFormField(
-              initialValue: section.name,
-              decoration: InputDecoration(
-                hintText: 'Titulo',
-                isDense: true,
-                enabledBorder: InputBorder.none
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  initialValue: section.name,
+                  decoration: InputDecoration(
+                      hintText: 'Titulo',
+                      isDense: true,
+                      border: InputBorder.none),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  onChanged: (text) => section.name = text,
+                ),
               ),
-              style: TextStyle(
+              CustomIconButton(
+                iconData: Icons.remove,
                 color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
-              onChanged: (text) => section.name = text,
-            ),
+                onTap: () {
+                  homeManager.removeSection(section);
+                },
+              )
+            ],
           ),
-          CustomIconButton(
-            iconData: Icons.remove,
-            color: Colors.white,
-            onTap: (){
-              homeManager.removeSection(section);
-            },
-          )
+          if (section.error != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                section.error,
+                style: TextStyle(color: Colors.red),
+              ),
+            )
         ],
       );
-    }else{
+    } else {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(section.name ?? '',
+        child: Text(
+          section.name ?? 'loja',
           style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Colors.white
-          ),),
+              fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white),
+        ),
       );
     }
   }

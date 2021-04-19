@@ -7,7 +7,7 @@ class HomeManager extends ChangeNotifier{
     _loadSections();
   }
 
-  List<Section> _sections = [];
+  final List<Section> _sections = [];
 
   List<Section> _editingSections = [];
 
@@ -51,8 +51,19 @@ class HomeManager extends ChangeNotifier{
   }
 
   void saveEditing(){
-    editing = false;
-    notifyListeners();
+    bool valid = true;
+    for(final section in _editingSections){
+      if(!section.valid()) valid = false;
+    }
+
+   if(!valid) return;
+
+   print('salvar');
+
+
+
+    /* editing = false;
+     notifyListeners();*/
   }
 
   void discardEditing(){

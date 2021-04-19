@@ -15,7 +15,6 @@ class SectionStaggered extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final homeManager = context.watch<HomeManager>();
 
     return ChangeNotifierProvider.value(
@@ -26,19 +25,18 @@ class SectionStaggered extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(),
-            Consumer<Section>(builder: (_, section,__){
-              return             StaggeredGridView.countBuilder(
+            Consumer<Section>(builder: (_, section, __) {
+              return StaggeredGridView.countBuilder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 crossAxisCount: 4,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: homeManager.editing
                     ? section.items.length + 1
                     : section.items.length,
                 itemBuilder: (_, index) {
-                  if(index < section.items.length)
-                    return ItemTile(
-                        section.items[index]
-                    );
+                  if (index < section.items.length)
+                    return ItemTile(section.items[index]);
                   else
                     return AddTileWidget();
                 },
@@ -47,7 +45,6 @@ class SectionStaggered extends StatelessWidget {
                 mainAxisSpacing: 4,
                 crossAxisSpacing: 4,
               );
-
             })
           ],
         ),
