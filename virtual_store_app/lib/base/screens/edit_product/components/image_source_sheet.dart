@@ -16,7 +16,7 @@ class ImageSourceSheet extends StatelessWidget {
       sourcePath: path,
       aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
       androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Editar Imagen',
+          toolbarTitle: 'Editar Imagem',
           toolbarColor: Theme.of(context).primaryColor,
           toolbarWidgetColor: Colors.white),
     );
@@ -28,30 +28,32 @@ class ImageSourceSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid)
-      return BottomSheet(
-          onClosing: () {},
-          builder: (_) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(
-                onPressed: () async {
-                  final PickedFile file =
-                  await picker.getImage(source: ImageSource.camera);
-                  editImage(file.path, context);
-                },
-                child: Text('Câmera'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  final PickedFile file =
-                  await picker.getImage(source: ImageSource.gallery);
-                  editImage(file.path, context);
-                },
-                child: Text('Galeria'),
-              )
-            ],
-          ));
+      return SingleChildScrollView(
+        child: BottomSheet(
+            onClosing: () {},
+            builder: (_) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    final PickedFile file =
+                    await picker.getImage(source: ImageSource.camera);
+                    editImage(file.path, context);
+                  },
+                  child: Text('Câmera'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final PickedFile file =
+                    await picker.getImage(source: ImageSource.gallery);
+                    editImage(file.path, context);
+                  },
+                  child: Text('Galeria'),
+                )
+              ],
+            )),
+      );
     else
       return CupertinoActionSheet(
         title: const Text('Selecionar foto para o item'),
