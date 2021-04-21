@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/user.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
+import 'package:virtual_store_app/services/cepaberto_service.dart';
 import 'cart_product.dart';
 
 class CartManager extends ChangeNotifier {
@@ -68,14 +69,14 @@ class CartManager extends ChangeNotifier {
       _updateCartProduct(cartProduct);
     }
 
-   notifyListeners();
+    notifyListeners();
   }
 
   void _updateCartProduct(CartProduct cartProduct) {
-    if(cartProduct.id != null)
-    user.cartReference
-        .document(cartProduct.id)
-        .updateData(cartProduct.toCartItemMap());
+    if (cartProduct.id != null)
+      user.cartReference
+          .document(cartProduct.id)
+          .updateData(cartProduct.toCartItemMap());
   }
 
   bool get isCartValid {
@@ -83,5 +84,18 @@ class CartManager extends ChangeNotifier {
       if (!cartProduct.hasStock) return false;
     }
     return true;
+  }
+
+  //ADDRESS
+
+  Future<void> getAddress(String cep) async {
+    final cepAbertoService = CepAbertoService();
+    try {
+      final address = await cepAbertoService.getAddressFromCep(cep);
+
+      print(address);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
