@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:virtual_store_app/models/home_manager.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/product_manager.dart';
-import 'package:virtual_store_app/models/sectiom_item.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:virtual_store_app/models/section.dart';
+import 'package:virtual_store_app/models/section_item.dart';
 
 class ItemTile extends StatelessWidget {
   const ItemTile(this.item);
