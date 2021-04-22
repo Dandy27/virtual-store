@@ -3,19 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:virtual_store_app/models/address.dart';
 
 class AddressInputField extends StatelessWidget {
-
   const AddressInputField(this.address);
+
   final Address address;
 
   @override
   Widget build(BuildContext context) {
-
     final primaryColor = Theme.of(context).primaryColor;
 
     String emptyValidator(String text) =>
         text.isEmpty ? 'Campo obrigatório' : null;
 
-    return Column(
+    if(address.zipCode != null)
+
+      return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextFormField(
@@ -26,35 +27,32 @@ class AddressInputField extends StatelessWidget {
             hintText: 'Av Paulista',
           ),
           validator: emptyValidator,
-          onSaved: (t) => address.street = t ,
+          onSaved: (t) => address.street = t,
         ),
         Row(
           children: [
-          Expanded(
-              child: TextFormField(
-                initialValue: address.number,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  labelText: 'Número',
-                  hintText: '123'),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                keyboardType: TextInputType.number,
-                validator: emptyValidator,
-                onSaved: (t) => address.number = t,
-              )
-          ),
+            Expanded(
+                child: TextFormField(
+              initialValue: address.number,
+              decoration: const InputDecoration(
+                  isDense: true, labelText: 'Número', hintText: '123'),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              keyboardType: TextInputType.number,
+              validator: emptyValidator,
+              onSaved: (t) => address.number = t,
+            )),
             const SizedBox(
               width: 16,
             ),
-            Expanded(child: TextFormField(
+            Expanded(
+                child: TextFormField(
               initialValue: address.complement,
               decoration: const InputDecoration(
-                isDense: true,
-                labelText: 'Complemento',
-                hintText: 'Opicional'
-              ),
+                  isDense: true,
+                  labelText: 'Complemento',
+                  hintText: 'Opicional'),
               onSaved: (t) => address.complement = t,
             ))
           ],
@@ -62,17 +60,14 @@ class AddressInputField extends StatelessWidget {
         TextFormField(
           initialValue: address.district,
           decoration: const InputDecoration(
-            isDense: true,
-            labelText: 'Bairro',
-            hintText: 'Taquaral'
-          ),
+              isDense: true, labelText: 'Bairro', hintText: 'Taquaral'),
           validator: emptyValidator,
           onSaved: (t) => address.district,
         ),
         Row(
           children: [
             Expanded(
-              flex: 3,
+                flex: 3,
                 child: TextFormField(
                   enabled: false,
                   initialValue: address.city,
@@ -83,9 +78,12 @@ class AddressInputField extends StatelessWidget {
                   ),
                   validator: emptyValidator,
                   onSaved: (t) => address.city = t,
-            )),
-            const SizedBox(width: 16,),
-            Expanded(child: TextFormField(
+                )),
+            const SizedBox(
+              width: 16,
+            ),
+            Expanded(
+                child: TextFormField(
               autocorrect: false,
               textCapitalization: TextCapitalization.characters,
               initialValue: address.state,
@@ -97,9 +95,9 @@ class AddressInputField extends StatelessWidget {
               ),
               maxLength: 2,
               validator: (e) {
-                if(e.isEmpty){
+                if (e.isEmpty) {
                   return 'Campo obrigatório';
-                } else if(e.length != 2){
+                } else if (e.length != 2) {
                   return 'Inválido';
                 }
                 return null;
@@ -108,15 +106,19 @@ class AddressInputField extends StatelessWidget {
             ))
           ],
         ),
-        const SizedBox(height: 8,),
+        const SizedBox(
+          height: 8,
+        ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: primaryColor
-          ),
-          onPressed: (){},
-            child: const Text('Calcular Frete'),
+          style: ElevatedButton.styleFrom(primary: primaryColor ),
+          onPressed: () {},
+          child: const Text('Calcular Frete', style: TextStyle(
+            fontSize: 18
+          ),),
         )
       ],
     );
+    else
+      return Container();
   }
 }
