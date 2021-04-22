@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:virtual_store_app/models/address.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/user.dart';
@@ -14,6 +15,8 @@ class CartManager extends ChangeNotifier {
   Address address;
 
   num productsPrice = 0.0;
+
+  final Firestore firestore = Firestore.instance;
 
   void updateUser(UserManager userManager) {
     user = userManager.user;
@@ -112,9 +115,35 @@ class CartManager extends ChangeNotifier {
     }
   }
 
-  void removeAddress(){
+  void setAddress(Address address) {
+    this.address = address;
+
+    calculateDelivery(address.lat, address.long);
+  }
+
+  void removeAddress() {
     address = null;
     notifyListeners();
   }
 
+  Future<void> calculateDelivery(double lat, double long) async {
+    final DocumentSnapshot doc = await firestore.document('aux/delivery').get();
+    final latStore = doc.data['lat'] as double;
+    final longStore = doc.data['long'] as double;
+
+    final maxkm = doc.data['maxkm'] as num;
+
+    double dis =
+        await Geolocator().distanceBetween(latStore, longStore, lat, long);
+
+    dis /= 1000.0;
+
+    // if(dis <= maxkm){
+    //
+    // }else {
+    //
+    // }
+    print('Distance $dis');
+
+  }
 }
