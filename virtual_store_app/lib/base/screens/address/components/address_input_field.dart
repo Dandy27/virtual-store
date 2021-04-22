@@ -21,6 +21,7 @@ class AddressInputField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            enabled: !cartManager.loading,
             initialValue: address.street,
             decoration: const InputDecoration(
               isDense: true,
@@ -34,6 +35,7 @@ class AddressInputField extends StatelessWidget {
             children: [
               Expanded(
                   child: TextFormField(
+                    enabled: !cartManager.loading,
                 initialValue: address.number,
                 decoration: const InputDecoration(
                     isDense: true, labelText: 'Número', hintText: '123'),
@@ -49,6 +51,7 @@ class AddressInputField extends StatelessWidget {
               ),
               Expanded(
                   child: TextFormField(
+                    enabled: !cartManager.loading,
                 initialValue: address.complement,
                 decoration: const InputDecoration(
                     isDense: true,
@@ -59,6 +62,7 @@ class AddressInputField extends StatelessWidget {
             ],
           ),
           TextFormField(
+            enabled: !cartManager.loading,
             initialValue: address.district,
             decoration: const InputDecoration(
                 isDense: true, labelText: 'Bairro', hintText: 'Taquaral'),
@@ -110,9 +114,16 @@ class AddressInputField extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
+          if(cartManager.loading)
+            LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(
+                primaryColor
+              ),
+              backgroundColor: Colors.transparent,
+            ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(primary: primaryColor),
-            onPressed: () async {
+            onPressed: cartManager.loading ?() async {
               if (Form.of(context).validate()) {
                 Form.of(context).save();
                 try {
@@ -124,7 +135,7 @@ class AddressInputField extends StatelessWidget {
                   ));
                 }
               }
-            },
+            } : null,
             child: const Text(
               'Calcular Frete',
               style: TextStyle(fontSize: 18),

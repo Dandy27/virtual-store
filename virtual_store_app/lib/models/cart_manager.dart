@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +21,15 @@ class CartManager extends ChangeNotifier {
   num get totalPrice => productsPrice + (deliveryPrice ?? 0);
 
   final Firestore firestore = Firestore.instance;
+
+  bool _loading = false;
+
+  bool get loading => _loading;
+
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   void updateUser(UserManager userManager) {
     user = userManager.user;
@@ -102,6 +109,8 @@ class CartManager extends ChangeNotifier {
   //ADDRESS
 
   Future<void> getAddress(String cep) async {
+    loading = true;
+
     final cepAbertoService = CepAbertoService();
     try {
       final cepAbertoAddress = await cepAbertoService.getAddressFromCep(cep);
@@ -115,23 +124,25 @@ class CartManager extends ChangeNotifier {
             state: cepAbertoAddress.estado.sigla,
             lat: cepAbertoAddress.latitude,
             long: cepAbertoAddress.longitude);
-
-        notifyListeners();
       }
+      loading = false;
     } catch (e) {
-      debugPrint(e.toString());
+      loading = false;
+      return Future.error('CEP Inválido');
     }
+
   }
 
-  Future<void> setAddress(Address address) async{
+  Future<void> setAddress(Address address) async {
+    loading = true;
+
     this.address = address;
 
-    if(await calculateDelivery(address.lat, address.long)){
-      print('price $deliveryPrice');
-      notifyListeners();
-
-    }else{
-    return Future.error('Endereço fora do raio de entrega');
+    if (await calculateDelivery(address.lat, address.long)) {
+      loading = false;
+    } else {
+      loading = false;
+      return Future.error('Endereço fora do raio de entrega');
     }
   }
 
@@ -146,7 +157,7 @@ class CartManager extends ChangeNotifier {
     final latStore = doc.data['lat'] as double;
     final longStore = doc.data['long'] as double;
 
-    final base =  doc.data['base'] as num;
+    final base = doc.data['base'] as num;
     final km = doc.data['km'] as num;
 
     final maxkm = doc.data['maxkm'] as num;
@@ -158,12 +169,11 @@ class CartManager extends ChangeNotifier {
 
     debugPrint('Distance $dis');
 
-    if(dis > maxkm){
+    if (dis > maxkm) {
       return false;
     }
 
     deliveryPrice = base + dis * km;
     return true;
-
   }
 }
