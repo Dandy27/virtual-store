@@ -76,7 +76,7 @@ class PriceCard extends StatelessWidget {
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle: const TextStyle(fontSize: 18)),
+                  textStyle: const TextStyle(fontSize: 16)),
               child: Text(buttonText),
             )
           ],
