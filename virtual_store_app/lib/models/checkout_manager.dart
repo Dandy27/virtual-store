@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:virtual_store_app/models/cart_manager.dart';
+import 'package:virtual_store_app/models/order.dart';
 import 'package:virtual_store_app/models/product.dart';
 
 class CheckoutManager extends ChangeNotifier {
@@ -15,11 +16,22 @@ class CheckoutManager extends ChangeNotifier {
 
   Future<void> checkout({Function  onStockFail}) async {
     try {
-      _decrementStock();
+      await _decrementStock();
     } catch (e) {
       onStockFail(e);
-      debugPrint(e.toString());
+      return;
     }
+
+    //  TODO: PROCESSAR PAGAMENTO
+
+    final orderId = await _getOrderId();
+
+    final order = Order.fromCartManager(cartManager);
+    order.orderId = orderId.toString();
+
+
+   await order.save();
+
 
     _getOrderId().then((value) => print(value));
   }
