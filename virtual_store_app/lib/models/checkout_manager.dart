@@ -11,4 +11,17 @@ class CheckoutManager extends ChangeNotifier{
     print(cartManager.productsPrice);
   }
 
+
+  void checkout(){
+    _decrementStock();
+  }
+
+  void _decrementStock(){
+    /// 1. Ler todos os estoques
+    /// 2. Decrementando localmente os estoques
+    /// 3. Salvar os estoques no firebase
+
+    //
+  }
+
 }
