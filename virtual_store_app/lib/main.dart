@@ -7,10 +7,10 @@ import 'package:virtual_store_app/models/home_manager.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/product_manager.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
-import 'package:virtual_store_app/services/cepaberto_service.dart';
 import 'base/screens/address/address_screen.dart';
 import 'base/screens/base_screen.dart';
 import 'base/screens/cart/cart_screen.dart';
+import 'base/screens/checkout/checkout_screen.dart';
 import 'base/screens/edit_product/edit_product_screen.dart';
 import 'base/screens/login/login_screen.dart';
 import 'base/screens/product/product_screen.dart';
@@ -78,6 +78,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(
                   builder: (_) => AddressScreen(),
                   settings: settings);
+            case '/checkout':
+              return MaterialPageRoute(builder: (_) => CheckoutScreen());
             case '/edit_product':
               return MaterialPageRoute(builder: (_) => EditProductScreen(
                 settings.arguments as Product

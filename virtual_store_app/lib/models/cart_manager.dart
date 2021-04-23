@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +18,26 @@ class CartManager extends ChangeNotifier {
   num productsPrice = 0.0;
   num deliveryPrice;
 
+  num get totalPrice => productsPrice + (deliveryPrice ?? 0);
+
   final Firestore firestore = Firestore.instance;
+
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   void updateUser(UserManager userManager) {
     user = userManager.user;
+    productsPrice = 0.0;
     items.clear();
+    removeAddress();
 
     if (user != null) {
       _loadCartItems();
+      _loadUserAddress();
     }
   }
 
@@ -37,6 +47,14 @@ class CartManager extends ChangeNotifier {
     items = cartSnap.documents
         .map((d) => CartProduct.fromDocuments(d)..addListener(_onItemUpdate))
         .toList();
+  }
+
+  Future<void> _loadUserAddress() async {
+    if (user.address != null &&
+        await calculateDelivery(user.address.lat, user.address.long)) {
+      address = user.address;
+      notifyListeners();
+    }
   }
 
   void addToCart(Product product) {
@@ -95,9 +113,13 @@ class CartManager extends ChangeNotifier {
     return true;
   }
 
+  bool get isAddressValid => address != null && deliveryPrice != null;
+
   //ADDRESS
 
   Future<void> getAddress(String cep) async {
+    loading = true;
+
     final cepAbertoService = CepAbertoService();
     try {
       final cepAbertoAddress = await cepAbertoService.getAddressFromCep(cep);
@@ -111,27 +133,31 @@ class CartManager extends ChangeNotifier {
             state: cepAbertoAddress.estado.sigla,
             lat: cepAbertoAddress.latitude,
             long: cepAbertoAddress.longitude);
-
-        notifyListeners();
       }
+      loading = false;
     } catch (e) {
-      debugPrint(e.toString());
+      loading = false;
+      return Future.error('CEP Inválido');
     }
   }
 
-  Future<void> setAddress(Address address) async{
+  Future<void> setAddress(Address address) async {
+    loading = true;
+
     this.address = address;
 
-    if(await calculateDelivery(address.lat, address.long)){
-      print('price $deliveryPrice');
-
-    }else{
-    return Future.error('Endereço fora do raio de entrega');
+    if (await calculateDelivery(address.lat, address.long)) {
+      user.setAddress(address);
+      loading = false;
+    } else {
+      loading = false;
+      return Future.error('Endereço fora do raio de entrega');
     }
   }
 
   void removeAddress() {
     address = null;
+    deliveryPrice = null;
     notifyListeners();
   }
 
@@ -140,7 +166,7 @@ class CartManager extends ChangeNotifier {
     final latStore = doc.data['lat'] as double;
     final longStore = doc.data['long'] as double;
 
-    final base =  doc.data['base'] as num;
+    final base = doc.data['base'] as num;
     final km = doc.data['km'] as num;
 
     final maxkm = doc.data['maxkm'] as num;
@@ -152,12 +178,11 @@ class CartManager extends ChangeNotifier {
 
     debugPrint('Distance $dis');
 
-    if(dis > maxkm){
+    if (dis > maxkm) {
       return false;
     }
 
     deliveryPrice = base + dis * km;
     return true;
-
   }
 }

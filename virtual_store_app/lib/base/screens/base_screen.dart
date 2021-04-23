@@ -7,7 +7,12 @@ import 'package:virtual_store_app/commom/custom_drawer/custom_drawer.dart';
 import 'package:virtual_store_app/models/page_manager.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
 
-class BaseScreen extends StatelessWidget {
+class BaseScreen extends StatefulWidget {
+  @override
+  _BaseScreenState createState() => _BaseScreenState();
+}
+
+class _BaseScreenState extends State<BaseScreen> {
   final PageController pageController = PageController();
 
   @override
