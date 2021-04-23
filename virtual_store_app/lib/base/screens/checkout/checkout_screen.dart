@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_store_app/commom/custom_drawer/price_card.dart';
@@ -10,7 +11,7 @@ class CheckoutScreen extends StatelessWidget {
     return ChangeNotifierProxyProvider<CartManager, CheckoutManager>(
       create: (_) => CheckoutManager(),
       update: (_, cartManager, checkoutManager) =>
-      checkoutManager..updateCart(cartManager),
+          checkoutManager..updateCart(cartManager),
       lazy: false,
       child: Scaffold(
         appBar: AppBar(
@@ -18,13 +19,17 @@ class CheckoutScreen extends StatelessWidget {
           centerTitle: true,
         ),
         body: Consumer<CheckoutManager>(
-          builder: (_, checkoutManager, __){
+          builder: (_, checkoutManager, __) {
             return ListView(
               children: [
                 PriceCard(
                   buttonText: 'Finalizar pedido',
-                  onPressed: (){
-                    checkoutManager.checkout();
+                  onPressed: () {
+                    checkoutManager.checkout(
+                        onStockFail: (e){
+                          Navigator.of(context).popUntil(
+                                  (route) => route.settings.name == '/cart');
+                    });
                   },
                 ),
               ],
