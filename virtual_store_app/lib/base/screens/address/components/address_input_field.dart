@@ -89,6 +89,7 @@ class AddressInputField extends StatelessWidget {
               ),
               Expanded(
                   child: TextFormField(
+                    enabled: false,
                 autocorrect: false,
                 textCapitalization: TextCapitalization.characters,
                 initialValue: address.state,
@@ -123,7 +124,7 @@ class AddressInputField extends StatelessWidget {
             ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(primary: primaryColor),
-            onPressed: cartManager.loading ?() async {
+            onPressed: !cartManager.loading ?() async {
               if (Form.of(context).validate()) {
                 Form.of(context).save();
                 try {
