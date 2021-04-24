@@ -80,6 +80,14 @@ class CartManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clear() {
+    for(final cartProduct in items){
+      user.cartReference.document(cartProduct.id).delete();
+    }
+    items.clear();
+    notifyListeners();
+  }
+
   void _onItemUpdate() {
     productsPrice = 0.0;
 
