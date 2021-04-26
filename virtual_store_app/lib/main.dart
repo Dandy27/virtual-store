@@ -4,6 +4,7 @@ import 'package:virtual_store_app/base/screens/login/signup/signup_screen.dart';
 import 'package:virtual_store_app/models/admin_users_manager.dart';
 import 'package:virtual_store_app/models/cart_manager.dart';
 import 'package:virtual_store_app/models/home_manager.dart';
+import 'package:virtual_store_app/models/orders.manager.dart';
 import 'package:virtual_store_app/models/product.dart';
 import 'package:virtual_store_app/models/product_manager.dart';
 import 'package:virtual_store_app/models/user_manager.dart';
@@ -42,6 +43,12 @@ class MyApp extends StatelessWidget {
           lazy: false,
           update: (_, userManager, cartManager) =>
               cartManager..updateUser(userManager),
+        ),
+        ChangeNotifierProxyProvider<UserManager, OrdersManager>(
+          create: (_) => OrdersManager(),
+          lazy: false,
+          update: (_, userManager, ordersManager) =>
+              ordersManager..updateUser(userManager.user),
         ),
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
             create: (_) => AdminUsersManager(),
